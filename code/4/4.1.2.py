@@ -157,16 +157,16 @@ def entropy(dataset):
 def info_gain(attribute_name, split, dataset):
 
     # split set and calculate probabilities that elements are in the splits
-    set_smaller = [elem for elem in dataset if elem[attribute_name] < split]
-    p_smaller = len(set_smaller) / len(dataset)
+    set_smaller = [elem for elem in dataset if elem[attribute_name] < split]#划分小于划分点的数据集
+    p_smaller = len(set_smaller) / len(dataset)#计算左边的概率
     set_greater_equals = [
-        elem for elem in dataset if elem[attribute_name] >= split]
+        elem for elem in dataset if elem[attribute_name] >= split]#划分大于划分点的数据集
     p_greater_equals = len(set_greater_equals) / len(dataset)
 
     # calculate information gain
-    info_gain = entropy(dataset)
-    info_gain -= p_smaller * entropy(set_smaller)
-    info_gain -= p_greater_equals * entropy(set_greater_equals)
+    info_gain = entropy(dataset)#计算信息率
+    info_gain -= p_smaller * entropy(set_smaller)#减去小于部分的信息率
+    info_gain -= p_greater_equals * entropy(set_greater_equals)#减去大于部分的信息率
 
     return info_gain
 
@@ -243,7 +243,7 @@ if __name__ == '__main__':
     # build decision tree
     dt = ID3_tree()
     dt.build(dataset, attr_list, attr_domains)
-    dt.merge_leaves()  # merge leaves with the same prediction
+    # dt.merge_leaves()  # merge leaves with the same prediction
 
     # calculate accuracy with test set
     accuracy = 0
