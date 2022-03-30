@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split
 import numpy as np
 import treeCreater
 import treePlottter
-
+pd.set_option('display.max_columns', None)
 
 iris = datasets.load_iris()
 X = pd.DataFrame(iris['data'], columns=iris['feature_names'])
@@ -23,17 +23,17 @@ X_train, X_val, y_train, y_val = train_test_split(
 # 不剪枝
 tree_no_pruning = treeCreater.DecisionTree('gini')
 tree_no_pruning.fit(X_train, y_train, X_val, y_val)
-print('不剪枝：', np.mean(tree_no_pruning.predict(X_test) == y_test))
+# print('不剪枝：', np.mean(tree_no_pruning.predict(X_test) == y_test))
 treePlottter.create_plot(tree_no_pruning.tree_)
 
-# 预剪枝
-tree_pre_pruning = treeCreater.DecisionTree('gini', 'pre_pruning')
-tree_pre_pruning.fit(X_train, y_train, X_val, y_val)
-print('预剪枝：', np.mean(tree_pre_pruning.predict(X_test) == y_test))
+# # 预剪枝
+# tree_pre_pruning = treeCreater.DecisionTree('gini', 'pre_pruning')
+# tree_pre_pruning.fit(X_train, y_train, X_val, y_val)
+# # print('预剪枝：', np.mean(tree_pre_pruning.predict(X_test) == y_test))
 # treePlottter.create_plot(tree_pre_pruning.tree_)
-
-# 后剪枝
-tree_post_pruning = treeCreater.DecisionTree('gini', 'post_pruning')
-tree_post_pruning.fit(X_train, y_train, X_val, y_val)
-print('后剪枝：', np.mean(tree_post_pruning.predict(X_test) == y_test))
-# treePlottter.create_plot(tree_post_pruning.tree_)
+#
+# # 后剪枝
+# tree_post_pruning = treeCreater.DecisionTree('gini', 'post_pruning')
+# tree_post_pruning.fit(X_train, y_train, X_val, y_val)
+# # print('后剪枝：', np.mean(tree_post_pruning.predict(X_test) == y_test))
+# # treePlottter.create_plot(tree_post_pruning.tree_)

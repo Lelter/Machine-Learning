@@ -362,22 +362,22 @@ if __name__ == '__main__':
     # treePlottter.create_plot(tree.tree_)
 
     # 4.4
-    data_path2 = r'C:\Users\hanmi\Documents\xiguabook\watermelon2_0_Ch.txt'
+    data_path2 = r'E:\Machine-Learning\code\dataset\xigua.txt'
     data = pd.read_table(data_path2, encoding='utf8',
                          delimiter=',', index_col=0)
-
+    print(data.head())
     train = [1, 2, 3, 6, 7, 10, 14, 15, 16, 17]
     train = [i - 1 for i in train]
-    X = data.iloc[train, :6]
-    y = data.iloc[train, 6]
+    X = data.iloc[train, :8]
+    y = data.iloc[train, 8]
 
     test = [4, 5, 8, 9, 11, 12, 13]
     test = [i - 1 for i in test]
 
-    X_val = data.iloc[test, :6]
-    y_val = data.iloc[test, 6]
+    X_val = data.iloc[test, :8]
+    y_val = data.iloc[test, 8]
 
-    tree = DecisionTree('gini', 'pre_pruning')
+    tree = DecisionTree('gini', )
     tree.fit(X, y, X_val, y_val)
 
     print(np.mean(tree.predict(X_val) == y_val))
