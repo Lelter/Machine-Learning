@@ -5,6 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.utils.multiclass import type_of_target
 import treePlottter
 
+
 class Node(object):
     def __init__(self):
         self.feature_name = None  # 特征名称
@@ -33,14 +34,14 @@ class DecisionTree(object):
         return self
 
     def geerate_tree(self, X_train, y_train):
-        my_tree = Node()#创建根节点
-        my_tree.leaf_num = 0#初始化叶子节点数量
+        my_tree = Node()  # 创建根节点
+        my_tree.leaf_num = 0  # 初始化叶子节点数量
         if y_train.nunique() == 1:  # 如果只有一个类别，则为叶子节点
-            my_tree.is_leaf = True#叶子节点
-            my_tree.leaf_class = y_train.values[0]#叶子节点的类别
-            my_tree.high = 0#叶子节点的高度
-            my_tree.leaf_num += 1#叶子节点数量加1
-            return my_tree#返回叶子节点
+            my_tree.is_leaf = True  # 叶子节点
+            my_tree.leaf_class = y_train.values[0]  # 叶子节点的类别
+            my_tree.high = 0  # 叶子节点的高度
+            my_tree.leaf_num += 1  # 叶子节点数量加1
+            return my_tree  # 返回叶子节点
         if X_train.empty:  # 如果特征用完了，数据为空，则为叶子节点
             my_tree.is_leaf = True
             my_tree.leaf_class = y_train.value_counts().idxmax()  # 返回样本最多的类别
@@ -48,52 +49,53 @@ class DecisionTree(object):
             my_tree.leaf_num += 1
             return my_tree
         best_feature_name, best_impurity = self.choose_best_feature_to_split(X_train, y_train)  # 选择最佳特征
-        my_tree.feature_name = best_feature_name#最佳特征名称
+        my_tree.feature_name = best_feature_name  # 最佳特征名称
         my_tree.impurity = best_impurity[0]  # 最佳分割值的名称
-        my_tree.feature_index = self.columns.index(best_feature_name)#最佳特征索引
-        feature_values = X_train.loc[:, best_feature_name]#最佳特征值
+        my_tree.feature_index = self.columns.index(best_feature_name)  # 最佳特征索引
+        feature_values = X_train.loc[:, best_feature_name]  # 最佳特征值
         if len(best_impurity) == 1:  # 如果是离散值
-            my_tree.is_continuous = False#离散值
-            unique_values = feature_values.unique()#最佳特征值的唯一值
+            my_tree.is_continuous = False  # 离散值
+            unique_values = feature_values.unique()  # 最佳特征值的唯一值
             sub_X_train = X_train.drop(best_feature_name, axis=1)  # 删除最佳特征
-            max_high = -1#初始化最大高度
+            max_high = -1  # 初始化最大高度
             for value in unique_values:  # 对每一个特征值
                 my_tree.subtree[value] = self.geerate_tree(sub_X_train[feature_values == value],
-                                                           y_train[feature_values == value])#递归生成子树
-                if my_tree.subtree[value].high > max_high:#如果子树的高度大于最大高度
+                                                           y_train[feature_values == value])  # 递归生成子树
+                if my_tree.subtree[value].high > max_high:  # 如果子树的高度大于最大高度
                     max_high = my_tree.subtree[value].high  # 取最大的高度为子树高度
                 my_tree.leaf_num += my_tree.subtree[value].leaf_num  # 添加子树的叶子数量
             my_tree.high = max_high + 1
         else:  # 如果是连续值
             my_tree.is_continuous = True
             my_tree.split_value = best_impurity[1]  # 最佳分割点
-            up_part = '>={:.4f}'.format(my_tree.split_value)#大于等于最佳分割点的特征值
-            down_part = '<{:.4f}'.format(my_tree.split_value)#小于最佳分割点的特征值
+            up_part = '>={:.4f}'.format(my_tree.split_value)  # 大于等于最佳分割点的特征值
+            down_part = '<{:.4f}'.format(my_tree.split_value)  # 小于最佳分割点的特征值
             my_tree.subtree[up_part] = self.geerate_tree(X_train[feature_values >= my_tree.split_value],
-                                                         y_train[feature_values >= my_tree.split_value])#递归生成大于等于最佳分割点的子树
+                                                         y_train[
+                                                             feature_values >= my_tree.split_value])  # 递归生成大于等于最佳分割点的子树
             my_tree.subtree[down_part] = self.geerate_tree(X_train[feature_values < my_tree.split_value],
                                                            y_train[feature_values < my_tree.split_value])
 
-            my_tree.leaf_num += my_tree.subtree[up_part].leaf_num + my_tree.subtree[down_part].leaf_num#添加子树的叶子数量
-            my_tree.high = max(my_tree.subtree[up_part].high, my_tree.subtree[down_part].high) + 1#计算子树高度
+            my_tree.leaf_num += my_tree.subtree[up_part].leaf_num + my_tree.subtree[down_part].leaf_num  # 添加子树的叶子数量
+            my_tree.high = max(my_tree.subtree[up_part].high, my_tree.subtree[down_part].high) + 1  # 计算子树高度
         return my_tree
 
     def choose_best_feature_to_split_gini(self, X_train, y_train):
         pass
 
     def choose_best_feature_to_split_infogain(self, X_train, y_train):
-        feature_names = X_train.columns#特征名称
-        best_feature_name = None#最佳特征名称
-        best_info_gain = [float('-inf')]#最佳信息增益
+        feature_names = X_train.columns  # 特征名称
+        best_feature_name = None  # 最佳特征名称
+        best_info_gain = [float('-inf')]  # 最佳信息增益
         entD = self.entropy(y_train)  # 计算数据集的熵
-        for feature_name in feature_names:#对每一个特征
+        for feature_name in feature_names:  # 对每一个特征
             # is_continuous = type_of_target(X_train[feature_name]) == 'continuous'
-            is_continuous = True#设定为连续值
+            is_continuous = True  # 设定为连续值
             info_gain = self.info_gain(X_train[feature_name], y_train, entD, is_continuous)  # 对每个特征计算信息增益
-            if info_gain[0] > best_info_gain[0]:#如果信息增益大于最佳信息增益
-                best_info_gain = info_gain#更新最佳信息增益
-                best_feature_name = feature_name#更新最佳特征名称
-        return best_feature_name, best_info_gain#返回最佳特征名称和最佳信息增益
+            if info_gain[0] > best_info_gain[0]:  # 如果信息增益大于最佳信息增益
+                best_info_gain = info_gain  # 更新最佳信息增益
+                best_feature_name = feature_name  # 更新最佳特征名称
+        return best_feature_name, best_info_gain  # 返回最佳特征名称和最佳信息增益
 
     def choose_best_feature_to_split(self, X_train, y_train):
         assert self.criterion in ['gini', 'infogain']

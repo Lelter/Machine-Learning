@@ -80,7 +80,6 @@ def choose_data(choose_data):
 
 
 image=choose_data('iris')
-display(image)
 # choose_data('iris')
 # choose_data('wine')
 # choose_data('diabetes')
