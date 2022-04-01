@@ -62,8 +62,8 @@ class DecisionTree(object):
         node_queue = [my_tree]  # 栈数据结构
         my_tree.v = my_tree.feature_name + "=?"
         print("加入", my_tree.v)
-        while node_queue:  # 栈不为空
-            curnode = node_queue.pop()  # 出栈，取当前节点为栈顶元素
+        while node_queue:  # 队不为空
+            curnode = node_queue.pop(0)  # 出队，取当前节点为队顶元素
             print("取出", curnode.v)
             if curnode.high >= max_height:  # 如果高度大于最大高度
                 curnode.is_leaf = True  # 设置为叶子节点
@@ -221,7 +221,7 @@ if __name__ == '__main__':
     X_val = data.iloc[test, :6]
     y_val = data.iloc[test, 6]
     tree = DecisionTree('infogain')
-    tree.fit(X, y, 2)
+    tree.fit(X, y, 5)
 
     print("精度为：", np.mean(tree.predict(X_val) == y_val))
     treePlottter.create_plot(tree.tree_)

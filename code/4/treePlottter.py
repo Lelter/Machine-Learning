@@ -35,7 +35,7 @@ def plot_tree(my_tree, parent_pt, node_text, ax_):
 
     plot_mid_text(node_text, center_pt, parent_pt, ax_)
 
-    if total_high == 0:  # total_high为零时，表示就直接为一个叶节点。因为西瓜数据集的原因，在预剪枝的时候，有时候会遇到这种情况。
+    if total_high == 0:  # total_high为零时，表示就直接为一个叶节点。
         plot_node(my_tree.leaf_class, center_pt, parent_pt, leaf_node, ax_)
         return
     plot_node(my_tree.feature_name, center_pt, parent_pt, decision_node, ax_)
