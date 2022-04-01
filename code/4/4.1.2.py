@@ -1,8 +1,7 @@
 import numpy as np
 import pandas as pd
-from sklearn import datasets
-from sklearn.model_selection import train_test_split
 from sklearn.utils.multiclass import type_of_target
+
 import treePlottter
 
 
@@ -79,10 +78,11 @@ class DecisionTree(object):
                 nextnode = Node()  # 创建节点
                 nextnode.high = curnode.high + 1
                 nextnode.is_continuous = False
-                nextnode.train_data = sub_X_train
-                nextnode.train_label = curnode.train_label[curnode.feature_value == value]
+
                 D_X = sub_X_train.loc[curnode.feature_value == value]  # 最佳特征X
                 D_y = curnode.train_label.loc[curnode.feature_value == value]  # 最佳特征Y
+                nextnode.train_data = D_X
+                nextnode.train_label = D_y
                 if D_X.empty:
                     nextnode.is_leaf = True
                     nextnode.leaf_class = D_y.value_counts().idxmax()  # 返回样本最多的类别
@@ -112,6 +112,8 @@ class DecisionTree(object):
             #         max_high = my_tree.subtree[value].high  # 取最大的高度为子树高度
             #     my_tree.leaf_num += my_tree.subtree[value].leaf_num  # 添加子树的叶子数量
             # my_tree.high = max_high + 1
+        print(my_tree)
+        self.calculate_leafnum(my_tree)
         return my_tree
 
     def choose_best_feature_to_split_infogain(self, X_train, y_train):
@@ -186,9 +188,20 @@ class DecisionTree(object):
             return self.predict_single(X_test, subtree.subtree[X_test[subtree.feature_index]])
         pass
 
+    def calculate_leafnum(self, my_tree):
+        if my_tree.is_leaf:
+            return my_tree.leaf_num
+        keys=my_tree.subtree.keys()
+        for key in keys:
+            print (key)
+            my_tree.leaf_num += self.calculate_leafnum(my_tree.subtree[key])
+        return my_tree.leaf_num
+
+        pass
+
 
 if __name__ == '__main__':
-    data_path2 = r'E:\Machine-Learning\code\dataset\table_4.2.csv'
+    data_path2 = r'..\dataset\table_4.2.csv'
     data = pd.read_csv(data_path2, encoding='utf8', index_col=0)
     print(data)
     train = [1, 2, 3, 6, 7, 10, 14, 15, 16, 17]
@@ -205,4 +218,4 @@ if __name__ == '__main__':
     tree.fit(X, y, 3)
 
     # print(np.mean(tree.predict(X_val) == y_val))
-    # treePlottter.create_plot(tree.tree_)
+    treePlottter.create_plot(tree.tree_)
