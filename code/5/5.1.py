@@ -184,5 +184,5 @@ if __name__ == '__main__':
     '''
     编程实现标准BP算法，在西瓜数据集3.0上训练一个单隐层网络，并做数据分析和结果评价。
     '''
-    D = Data("../dataset/3.0.csv", "BP_AST", 50)
+    D = Data("../dataset/3.0.csv", "BP_ST", 10000)
     print("准确率为:{}%".format(round(D.Predict() * 100, 3)))
