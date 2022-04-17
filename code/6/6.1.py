@@ -44,7 +44,7 @@ def plt_support_(clf, X_, y_, kernel, c):
     plt.show()
 
 
-path = r'E:\Machine-Learning\code\dataset\3.0a.csv'
+path = r'..\dataset\3.0a.csv'
 data = pd.read_csv(path)
 
 X = data.iloc[:, [1, 2]].values
