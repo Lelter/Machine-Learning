@@ -209,7 +209,7 @@ class DecisionTree(object):
 
 
 if __name__ == '__main__':
-    data_path2 = r'..\dataset\table_4.2.csv'
+    data_path2 = r'E:\Machine-Learning\code\dataset\table_4.2.csv'
     data = pd.read_csv(data_path2, encoding='utf8', index_col=0)
     train = [1, 2, 3, 6, 7, 10, 14, 15, 16, 17]
     train = [i - 1 for i in train]

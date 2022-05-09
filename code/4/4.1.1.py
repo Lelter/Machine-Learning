@@ -295,7 +295,8 @@ class DecisionTree(object):
 
 
 if __name__ == '__main__':
-    # diabetes = pd.read_csv('..\dataset\diabetes.csv', header=None)
+    # diabetes = pd.read_csv(
+    #     r'E:\Machine-Learning\code\dataset\diabetes.csv', header=None)
     # diabetes.columns = ['pregnant', 'plasma_glucose', 'blood_pressure', 'triceps', 'serum_insulin', 'body_mass_index',
     #                     'diabetes_pedigree', 'age', 'class']
     # data = diabetes.iloc[:, :-1].values
@@ -317,15 +318,15 @@ if __name__ == '__main__':
     X_train, X_val, y_train, y_val = train_test_split(
         X_train, y_train, test_size=0.25, random_state=15)
 
-    # tree_no_pruning = DecisionTree('infogain')
-    # tree_no_pruning.fit(X_train, y_train, X_val, y_val)
-    # print('不剪枝：', np.mean(tree_no_pruning.predict(X_test) == y_test))
-    # treePlottter.create_plot(tree_no_pruning.tree_)
+    tree_no_pruning = DecisionTree('infogain')
+    tree_no_pruning.fit(X_train, y_train, X_val, y_val)
+    print('不剪枝：', np.mean(tree_no_pruning.predict(X_test) == y_test))
+    treePlottter.create_plot(tree_no_pruning.tree_)
     #
-    # tree_pre_pruning = DecisionTree('infogain', 'pre_pruning')
-    # tree_pre_pruning.fit(X_train, y_train, X_val, y_val)
-    # print('预剪枝：', np.mean(tree_pre_pruning.predict(X_test) == y_test))
-    # treePlottter.create_plot(tree_pre_pruning.tree_)
+    tree_pre_pruning = DecisionTree('infogain', 'pre_pruning')
+    tree_pre_pruning.fit(X_train, y_train, X_val, y_val)
+    print('预剪枝：', np.mean(tree_pre_pruning.predict(X_test) == y_test))
+    treePlottter.create_plot(tree_pre_pruning.tree_)
 
     tree_post_pruning = DecisionTree('infogain', 'post_pruning')
     tree_post_pruning.fit(X_train, y_train, X_val, y_val)

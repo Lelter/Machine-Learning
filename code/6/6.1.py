@@ -27,7 +27,6 @@ def plt_support_(clf, X_, y_, kernel, c):
     Z_rbf = clf.predict(#计算预测值
         np.c_[X_tmp.ravel(), Y_tmp.ravel()]).reshape(X_tmp.shape)
 
-    # ax.contourf(X_, Y_, Z_rbf, alpha=0.75)
     cs = ax.contour(X_tmp, Y_tmp, Z_rbf, [0], colors='orange', linewidths=1)#绘制超平面
     ax.clabel(cs, fmt={cs.levels[0]: 'decision boundary'})#设置超平面标签
 
@@ -44,7 +43,7 @@ def plt_support_(clf, X_, y_, kernel, c):
     plt.show()
 
 
-path = r'.\code\dataset\3.0a.csv'
+path = r'E:\Machine-Learning\code\dataset\3.0a.csv'
 data = pd.read_csv(path)
 
 X = data.iloc[:, [1, 2]].values
