@@ -1,0 +1,8 @@
+执行环境：
+python3.6
+windows11
+matplotlib
+numpy
+seaborn
+
+作业6.1执行6.1.py，自动执行线性核与高斯核两个函数，画出两个图。

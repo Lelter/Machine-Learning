@@ -1,0 +1,9 @@
+执行环境：
+python3.6
+windows11
+matplotlib
+numpy
+seaborn
+
+作业5.1执行5.1_final.py，自动运行标准BP算法，需要运行累积BP算法要将SP改成ASP
+其他为草稿文件，数据集在数据集文件夹中。

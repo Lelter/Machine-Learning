@@ -1,0 +1,11 @@
+执行环境：
+python3.6
+windows11
+matplotlib
+numpy
+seaborn
+
+作业3.3执行3.3_final.ipynb，运行后自动画图，计算出准确率。
+其他文件为草稿文件。
+作业3.4执行3.4_final.ipynb，运行后自动画图，计算出两个算法的准确率。
+作业3.5执行3.5_final.ipynb，运行后自动画图，计算出准确率。
