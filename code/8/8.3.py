@@ -276,14 +276,12 @@ def Adaboost(X, Y, T, rule='MaxInfoGain', show=False):
     for t in range(T):
         if rule == 'MaxInfoGain':
             ht = decision_sdumps_MaxInfoGain(X, Y, D)
-        elif rule == 'MinError':
-            ht = decision_sdumps_MinError(X, Y, D)
         else:  # rule=='Random'或者其他未知取值时，随机产生
             ht = decision_sdumps_Random(X, Y, D)
-        ht_pre = (X[:, ht[0]] <= ht[1]) * 2 - 1  # 左分支为1，右分支为-1
-        et = sum((ht_pre != Y) * D)
+        ht_pre = (X[:, ht[0]] <= ht[1]) * 2 - 1  # 预测，左分支为1，右分支为-1
+        et = sum((ht_pre != Y) * D)#计算分错样本的权值和
         while abs(et - 0.5) < 1E-3:
-            # 若et=1/2，重新随机生成
+            # 若et=1/2，重新随机生成，因为log1为0
             ht = decision_sdumps_Random(X, Y, D)
             ht_pre = (X[:, ht[0]] <= ht[1]) * 2 - 1
             et = sum((ht_pre != Y) * D)
@@ -317,29 +315,6 @@ def Adaboost(X, Y, T, rule='MaxInfoGain', show=False):
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     return H
 
-
-def decision_sdumps_MinError(X, Y, D):
-    # 基学习器---决策树桩
-    # 以最小化错误率来选择划分属性和划分点
-    m, n = X.shape  # 样本数和特征数
-    results = []  # 存储各个特征下的最佳划分点和错误率
-    for i in range(n):  # 遍历各个候选特征
-        x = X[:, i]  # 样本在该特征下的取值
-        x_sorted = np.unique(x)  # 该特征下的可能取值并排序
-        ts = (x_sorted[1:] + x_sorted[:-1]) / 2  # 候选划分点
-        Errors = []  # 存储各个划分点下的|错误率-0.5|的值
-        for t in ts:
-            Ypre = (x <= t) * 2 - 1
-            Errors.append(abs(sum(D[Ypre != Y]) - 0.5))
-        Bestindex = np.argmax(Errors)  # 距离0.5最远的错误率的索引号
-        results.append([ts[Bestindex], Errors[Bestindex]])
-
-    results = np.array(results)
-    divide_feature = np.argmax(results[:, 1])  # 划分特征
-    h = [divide_feature, results[divide_feature, 0]]  # 划分特征和划分点
-    return h
-
-
 def decision_sdumps_MaxInfoGain(X, Y, D):
     # 基学习器---决策树桩
     # 以信息增益最大来选择划分属性和划分点
@@ -366,10 +341,10 @@ def decision_sdumps_MaxInfoGain(X, Y, D):
 
             Gains.append(Gain)
 
-        results.append([ts[np.argmax(Gains)], max(Gains)])
+        results.append([ts[np.argmax(Gains)], max(Gains)])#添加最大信息增益的索引和值
 
     results = np.array(results)
-    divide_feature = np.argmax(results[:, 1])  # 划分特征
+    divide_feature = np.argmax(results[:, 1])  # 划分特征,寻去最佳特征的索引
     h = [divide_feature, results[divide_feature, 0]]  # 划分特征和划分点
     return h
 

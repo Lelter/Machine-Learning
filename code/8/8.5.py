@@ -36,14 +36,12 @@ def decision_sdumps_MaxInfoGain(X, Y):
             p1 = sum(Y_right == 1) / Dr  # 右分支正样本比例
             p0 = sum(Y_right == -1) / Dr  # 右分支负样本比例
             Gain += Dr / m * (np.log2(p1 ** p1) + np.log2(p0 ** p0))
-
             Gains.append(Gain)
         best_t = ts[np.argmax(Gains)]  # 当前特征下的最佳划分点
         best_gain = max(Gains)  # 当前特征下的最佳信息增益
         left_value = (sum(Y[x <= best_t]) >= 0) * 2 - 1  # 左分支取值(多数类的类别)
         right_value = (sum(Y[x > best_t]) >= 0) * 2 - 1  # 右分支取值(多数类的类别)
         results.append([best_t, left_value, right_value, best_gain])
-
     results = np.array(results)
     df = np.argmax(results[:, -1])  # df表示divide_feature，划分特征
     h = [df] + list(results[df, :3])  # 划分特征,划分点,左枝取值，右枝取值
